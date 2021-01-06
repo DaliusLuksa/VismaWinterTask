@@ -1,0 +1,12 @@
+C:\Users\Dalius\Desktop\VismaWinterTask\bin\Debug\VismaWinterTask.exe.config
+C:\Users\Dalius\Desktop\VismaWinterTask\bin\Debug\VismaWinterTask.exe
+C:\Users\Dalius\Desktop\VismaWinterTask\bin\Debug\VismaWinterTask.pdb
+C:\Users\Dalius\Desktop\VismaWinterTask\obj\Debug\VismaWinterTask.csprojAssemblyReference.cache
+C:\Users\Dalius\Desktop\VismaWinterTask\obj\Debug\VismaWinterTask.Form1.resources
+C:\Users\Dalius\Desktop\VismaWinterTask\obj\Debug\VismaWinterTask.Properties.Resources.resources
+C:\Users\Dalius\Desktop\VismaWinterTask\obj\Debug\VismaWinterTask.csproj.GenerateResource.cache
+C:\Users\Dalius\Desktop\VismaWinterTask\obj\Debug\VismaWinterTask.csproj.CoreCompileInputs.cache
+C:\Users\Dalius\Desktop\VismaWinterTask\obj\Debug\VismaWinterTask.exe
+C:\Users\Dalius\Desktop\VismaWinterTask\obj\Debug\VismaWinterTask.pdb
+C:\Users\Dalius\Desktop\VismaWinterTask\obj\Debug\VismaWinterTask.Menu.resources
+C:\Users\Dalius\Desktop\VismaWinterTask\obj\Debug\VismaWinterTask.Orders.resources
