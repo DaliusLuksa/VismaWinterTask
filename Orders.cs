@@ -16,8 +16,6 @@ namespace VismaWinterTask
         private const string _fileName = "orders.csv";
         private CSVReader _csvReader;
 
-        private string _lastSelectedItem;
-
         public Orders()
         {
             InitializeComponent();
@@ -31,8 +29,6 @@ namespace VismaWinterTask
             orderIdBox.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
             orderDatePicker.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
             orderMenuBox.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-
-            _lastSelectedItem = $"{orderIdBox.Text},{orderDatePicker.Value},{orderMenuBox.Text}";
         }
 
         // insert button
@@ -58,7 +54,7 @@ namespace VismaWinterTask
             if (orderIdBox.Text != "" && orderMenuBox.Text != "")
             {
                 string updatedItem = $"{orderIdBox.Text},{orderDatePicker.Value},{orderMenuBox.Text}";
-                _csvReader.UpdateItem(_lastSelectedItem, updatedItem);
+                _csvReader.UpdateItem(int.Parse(orderIdBox.Text), updatedItem);
                 ClearData();
             }
             else

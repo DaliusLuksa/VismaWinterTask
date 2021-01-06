@@ -57,37 +57,48 @@ namespace VismaWinterTask
             }
         }
 
-        public void UpdateItem(string oldLine, string newLine)
+        public void UpdateItem(int index, string newLine)
         {
-            if (_lines.FindIndex(o => o == oldLine) == -1)
+            // because of date being written differently on each machine
+            // instead of looking for a old line in the list
+            // we have to split each line and look for a given id
+            for (int i = 1; i < _lines.Count; i++)
             {
-                MessageBox.Show("The item you wish to update was not found.");
-            }
-            else
-            {
-                _lines[_lines.FindIndex(o => o == oldLine)] = newLine;
-            }
-            
-
-            try
-            {
-                using (StreamWriter file = new StreamWriter(@_filename, false))
+                int id = int.Parse(_lines[i].Split(new char[] { ',' })[0]);
+                
+                if (id == index)
                 {
-                    foreach(var line in _lines)
+                    // found the item in the list
+                    // now we can update the line with new one
+                    _lines[i] = newLine;
+
+                    try
                     {
-                        file.WriteLine(line);
+                        using (StreamWriter file = new StreamWriter(@_filename, false))
+                        {
+                            foreach (var line in _lines)
+                            {
+                                file.WriteLine(line);
+                            }
+
+                            file.Close();
+                        }
+
+                        ReadFile();
+
+                        // we updated the line so we can now return
+                        return;
                     }
-
-                    file.Close();
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error is " + ex.ToString());
+                        throw;
+                    }
                 }
+            }
 
-                ReadFile();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error is " + ex.ToString());
-                throw;
-            }
+            // line which we wanted to update was not found
+            MessageBox.Show("The item you wish to update was not found.");
         }
 
         public void DeleteItem(string lineToDelete)

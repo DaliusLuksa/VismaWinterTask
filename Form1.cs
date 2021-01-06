@@ -16,8 +16,6 @@ namespace VismaWinterTask
         private const string _fileName = "stock.csv";
         private CSVReader _csvReader;
 
-        private string _lastSelectedItem;
-
         public Form1()
         {
             InitializeComponent();
@@ -33,8 +31,6 @@ namespace VismaWinterTask
             stockCountBox.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
             stockUnitBox.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
             stockSizeBox.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
-
-            _lastSelectedItem = $"{stockIdBox.Text},{stockNameBox.Text},{stockCountBox.Text},{stockUnitBox.Text},{stockSizeBox.Text}";
         }
 
         // insert button
@@ -59,7 +55,7 @@ namespace VismaWinterTask
             if (stockIdBox.Text != "" && stockNameBox.Text != "" && stockCountBox.Text != "" && stockUnitBox.Text != "" && stockSizeBox.Text != "")
             {
                 string updatedItem = $"{stockIdBox.Text},{stockNameBox.Text},{stockCountBox.Text},{stockUnitBox.Text},{stockSizeBox.Text}";
-                _csvReader.UpdateItem(_lastSelectedItem, updatedItem);
+                _csvReader.UpdateItem(int.Parse(stockIdBox.Text), updatedItem);
                 ClearData();
             }
             else

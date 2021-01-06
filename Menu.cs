@@ -16,8 +16,6 @@ namespace VismaWinterTask
         private const string _fileName = "menu.csv";
         private CSVReader _csvReader;
 
-        private string _lastSelectedItem;
-
         public Menu()
         {
             InitializeComponent();
@@ -31,8 +29,6 @@ namespace VismaWinterTask
             menuIdBox.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
             menuNameBox.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
             menuProductsBox.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-
-            _lastSelectedItem = $"{menuIdBox.Text},{menuNameBox.Text},{menuProductsBox.Text}";
         }
 
         // insert button
@@ -58,7 +54,7 @@ namespace VismaWinterTask
             if (menuIdBox.Text != "" && menuNameBox.Text != "" && menuProductsBox.Text != "")
             {
                 string updatedItem = $"{menuIdBox.Text},{menuNameBox.Text},{menuProductsBox.Text}";
-                _csvReader.UpdateItem(_lastSelectedItem, updatedItem);
+                _csvReader.UpdateItem(int.Parse(menuIdBox.Text), updatedItem);
                 ClearData();
             }
             else
