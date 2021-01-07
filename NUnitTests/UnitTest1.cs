@@ -30,6 +30,16 @@ namespace NUnitTests
         }
 
         [Test]
+        public void Insert_WithNegativeId_ReturnFalse()
+        {
+            // set id to negative number
+            string id = "-10";
+            string[] param = { id, "", "10", "Kg", "1.1" };
+
+            Assert.IsFalse(_csvReader.InsertItem(param));
+        }
+
+        [Test]
         public void Insert_WithExistingId_ReturnFalse()
         {
             // set id to already existing one
@@ -130,63 +140,6 @@ namespace NUnitTests
             int id = 500;
 
             Assert.IsTrue(_csvReader.DeleteItem(id));
-        }
-    }
-
-    public class StockTests
-    {
-        [Test]
-        public void Update_WithValidInputs_ReturnTruesss()
-        {
-            string _filename = "stock.csv";
-            CSVReader _csvReader = new CSVReader(_filename);
-
-            // to populate _lines list
-            _csvReader.ReadFile();
-
-            // any id that exists in the file
-            int id = 1;
-            string updatedItem = $"{id},Name,20,Kg,0.5";
-
-            Assert.IsTrue(_csvReader.UpdateItem(id, updatedItem));
-        }
-    }
-
-    public class MenuTests
-    {
-        [Test]
-        public void Update_WithValidInputs_ReturnTruesss()
-        {
-            string _filename = "stock.csv";
-            CSVReader _csvReader = new CSVReader(_filename);
-
-            // to populate _lines list
-            _csvReader.ReadFile();
-
-            // any id that exists in the file
-            int id = 1;
-            string updatedItem = $"{id},Name,20,Kg,0.5";
-
-            Assert.IsTrue(_csvReader.UpdateItem(id, updatedItem));
-        }
-    }
-
-    public class OrdersTests
-    {
-        [Test]
-        public void Update_WithValidInputs_ReturnTruesss()
-        {
-            string _filename = "stock.csv";
-            CSVReader _csvReader = new CSVReader(_filename);
-
-            // to populate _lines list
-            _csvReader.ReadFile();
-
-            // any id that exists in the file
-            int id = 1;
-            string updatedItem = $"{id},Name,20,Kg,0.5";
-
-            Assert.IsTrue(_csvReader.UpdateItem(id, updatedItem));
         }
     }
 }
