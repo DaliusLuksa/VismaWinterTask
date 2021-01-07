@@ -110,7 +110,7 @@ namespace VismaWinterTask
 
         private bool CheckInputs()
         {
-            // check if given id value is int
+            // check if given id value is int and <= 0
             // and is not null or empty
             try
             {
@@ -120,7 +120,11 @@ namespace VismaWinterTask
                     return false;
                 }
 
-                int.Parse(stockIdBox.Text);
+                if (int.Parse(stockIdBox.Text) <= 0)
+                {
+                    MessageBox.Show("Id cannot be negative or 0.");
+                    return false;
+                }
             }
             catch (FormatException)
             {
@@ -135,7 +139,7 @@ namespace VismaWinterTask
                 return false;
             }
 
-            // check if given count value is int
+            // check if given count value is int and above 0
             // and is not null or empty
             try
             {
@@ -145,7 +149,11 @@ namespace VismaWinterTask
                     return false;
                 }
 
-                int.Parse(stockCountBox.Text);
+                if (int.Parse(stockCountBox.Text) <= 0)
+                {
+                    MessageBox.Show("Portion Count cannot be negative or 0.");
+                    return false;
+                }
             }
             catch (FormatException)
             {
@@ -170,7 +178,11 @@ namespace VismaWinterTask
                     return false;
                 }
 
-                double.Parse(stockSizeBox.Text);
+                if (double.Parse(stockSizeBox.Text) <= 0)
+                {
+                    MessageBox.Show("Portion Size cannot be negative or 0.");
+                    return false;
+                }
             }
             catch (FormatException)
             {

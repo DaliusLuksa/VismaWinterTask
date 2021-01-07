@@ -115,7 +115,11 @@ namespace VismaWinterTask
                     return false;
                 }
 
-                int.Parse(orderIdBox.Text);
+                if (int.Parse(orderIdBox.Text) <= 0)
+                {
+                    MessageBox.Show("Id cannot be negative or 0.");
+                    return false;
+                }
             }
             catch (FormatException)
             {
@@ -136,7 +140,11 @@ namespace VismaWinterTask
                 var products = orderMenuBox.Text.Split(new char[] { ' ' });
                 foreach (var product in products)
                 {
-                    int.Parse(product);
+                    if (int.Parse(product) <= 0)
+                    {
+                        MessageBox.Show("Menu Items cannot be negative or 0.");
+                        return false;
+                    }
                 }
             }
             catch (FormatException)
@@ -208,17 +216,22 @@ namespace VismaWinterTask
                     string[] products = fields[2].Split(new char[] { ' ' });
                     foreach (var productID in products)
                     {
-                        if (!CheckStock(int.Parse(productID), stockLines))
+                        if (CheckStock(int.Parse(productID), stockLines))
                         {
-                            // product was not found or was not enough
+                            // product was found and there was enough
+                            return true;
+                        }
+                        else
+                        {
+                            // product was not found or there was not enough of it
                             return false;
                         }
                     }
                 }
             }
 
-            // all products were found and there was enough
-            return true;
+            // product was not found
+            return false;
         }
 
         private bool CheckStock(int index, List<string> stockLines)

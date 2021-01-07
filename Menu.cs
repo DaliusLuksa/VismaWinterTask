@@ -94,7 +94,11 @@ namespace VismaWinterTask
                     return false;
                 }
 
-                int.Parse(menuIdBox.Text);
+                if (int.Parse(menuIdBox.Text) <= 0)
+                {
+                    MessageBox.Show("Id cannot be negative or 0.");
+                    return false;
+                }
             }
             catch (FormatException)
             {
@@ -122,7 +126,11 @@ namespace VismaWinterTask
                 var products = menuProductsBox.Text.Split(new char[] { ' ' });
                 foreach (var product in products)
                 {
-                    int.Parse(product);
+                    if (int.Parse(product) <= 0)
+                    {
+                        MessageBox.Show("Products cannot be negative or 0.");
+                        return false;
+                    }
                 }
             }
             catch (FormatException)
