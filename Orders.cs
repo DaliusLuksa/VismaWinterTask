@@ -206,6 +206,8 @@ namespace VismaWinterTask
 
         private bool CheckMenu(int index, List<string> menuLines, List<string> stockLines)
         {
+            // for checking if we failed to find products
+            // or the required amount of them
             bool isEnough = true;
 
             for (int i = 1; i < menuLines.Count; i++)
