@@ -9,11 +9,13 @@ namespace VismaWinterTask
     public class CSVReader
     {
         private string _filename;
-        private List<string> _lines;
+        public List<string> _lines { get; private set; }
 
         public CSVReader(string filename)
         {
             _filename = filename;
+            // populate _lines
+            ReadFile();
         }
 
         public DataTable ReadFile()
