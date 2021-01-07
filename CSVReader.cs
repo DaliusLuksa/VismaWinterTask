@@ -1,4 +1,8 @@
-﻿using System;
+﻿// The problem here is that I can't use
+// Form because Unit tests don't have
+// Form libraries and won't work
+// so I had to comment all MessageBox.Show()
+
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -32,10 +36,11 @@ namespace VismaWinterTask
                 string[] Fields;
                 Fields = Lines[0].Split(new char[] { ',' });
                 int Cols = Fields.GetLength(0);
+
                 DataTable dt = new DataTable();
-                //1st row must be column names; force lower case to ensure matching later on.
                 for (int i = 0; i < Cols; i++)
                     dt.Columns.Add(Fields[i], typeof(string));
+
                 DataRow Row;
                 for (int i = 1; i < Lines.GetLength(0); i++)
                 {
@@ -48,7 +53,7 @@ namespace VismaWinterTask
 
                 return dt;
             }
-            catch (Exception ex)
+            catch
             {
                 //MessageBox.Show("Error is " + ex.ToString());
                 return null;
@@ -65,6 +70,12 @@ namespace VismaWinterTask
                 {
                     return false;
                 }
+            }
+
+            // check if id value is negative or 0
+            if (int.Parse(param[0]) <= 0)
+            {
+                return false;
             }
 
             // check if the new item's id already exists in the list
@@ -91,7 +102,7 @@ namespace VismaWinterTask
 
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 //MessageBox.Show("Error is " + ex.ToString());
                 return false;
@@ -136,7 +147,7 @@ namespace VismaWinterTask
                         // we updated the line so we can now return
                         return true;
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         //MessageBox.Show("Error is " + ex.ToString());
                         return false;
@@ -195,7 +206,7 @@ namespace VismaWinterTask
 
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 //MessageBox.Show("Error is " + ex.ToString());
                 return false;
@@ -204,13 +215,6 @@ namespace VismaWinterTask
 
         private bool IsIdExists(int index)
         {
-            // check if _lines is not null
-            // if it is then try to populate
-            if (_lines == null)
-            {
-                ReadFile();
-            }
-
             for (int i = 1; i < _lines.Count; i++)
             {
                 int id = int.Parse(_lines[i].Split(new char[] { ',' })[0]);
