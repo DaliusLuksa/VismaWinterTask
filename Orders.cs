@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace VismaWinterTask
@@ -19,7 +11,7 @@ namespace VismaWinterTask
         public Orders()
         {
             InitializeComponent();
-            _csvReader = new CSVReader(@_fileName, dataGridView1);
+            _csvReader = new CSVReader(@_fileName);
             // load data on the init
             DisplayData();
         }
@@ -34,17 +26,17 @@ namespace VismaWinterTask
         // insert button
         private void button1_Click(object sender, EventArgs e)
         {
-            string[] products = orderMenuBox.Text.Split(new char[] { ' ' });
+            string[] param = { orderIdBox.Text, orderDatePicker.Value.ToString(), orderMenuBox.Text };
 
-            if (AddNewOrder(
-                int.Parse(orderIdBox.Text),
-                orderDatePicker.Value,
-                products
-                ))
+            if (_csvReader.InsertItem(param))
             {
                 // after adding new item update the table content
                 DisplayData();
                 ClearData();
+            }
+            else
+            {
+                MessageBox.Show("Order was not added.");
             }
         }
 
@@ -54,8 +46,15 @@ namespace VismaWinterTask
             if (orderIdBox.Text != "" && orderMenuBox.Text != "")
             {
                 string updatedItem = $"{orderIdBox.Text},{orderDatePicker.Value},{orderMenuBox.Text}";
-                _csvReader.UpdateItem(int.Parse(orderIdBox.Text), updatedItem);
-                ClearData();
+                if (_csvReader.UpdateItem(int.Parse(orderIdBox.Text), updatedItem))
+                {
+                    ClearData();
+                    DisplayData();
+                }
+                else
+                {
+                    MessageBox.Show("Order was not updated.");
+                }
             }
             else
             {
@@ -68,9 +67,15 @@ namespace VismaWinterTask
         {
             if (orderIdBox.Text != "")
             {
-                string item = $"{orderIdBox.Text},{orderDatePicker.Value},{orderMenuBox.Text}";
-                _csvReader.DeleteItem(item);
-                ClearData();
+                if (_csvReader.DeleteItem(int.Parse(orderIdBox.Text)))
+                {
+                    ClearData();
+                    DisplayData();
+                }
+                else
+                {
+                    MessageBox.Show("Order was not deleted.");
+                }
             }
             else
             {
@@ -81,7 +86,7 @@ namespace VismaWinterTask
         // display data in DataGridView
         private void DisplayData()
         {
-            _csvReader.ReadFile();
+            dataGridView1.DataSource = _csvReader.ReadFile();
         }
 
         // clear Data  
@@ -90,34 +95,6 @@ namespace VismaWinterTask
             orderIdBox.Text = "";
             orderDatePicker.Text = "";
             orderMenuBox.Text = "";
-        }
-
-        private bool AddNewOrder(int id, DateTime dateTime, string[] menuItems)
-        {
-            // check if any of the given inputs are empty or in the incorrect format
-            if (id <= 0 || menuItems.Length == 0) { return false; }
-
-            try
-            {
-                StringBuilder builder = new StringBuilder();
-                builder.Append($"{id},{dateTime},");
-                foreach (var product in menuItems)
-                {
-                    builder.Append($"{product} ");
-                }
-
-                using (StreamWriter file = new StreamWriter(@_fileName, true))
-                {
-                    file.WriteLine(builder.ToString());
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error is " + ex.ToString());
-                throw;
-            }
         }
     }
 }

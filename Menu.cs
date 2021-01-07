@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace VismaWinterTask
@@ -19,7 +11,7 @@ namespace VismaWinterTask
         public Menu()
         {
             InitializeComponent();
-            _csvReader = new CSVReader(@_fileName, dataGridView1);
+            _csvReader = new CSVReader(@_fileName);
             // load data on the init
             DisplayData();
         }
@@ -34,17 +26,17 @@ namespace VismaWinterTask
         // insert button
         private void button1_Click(object sender, EventArgs e)
         {
-            string[] products = menuProductsBox.Text.Split(new char[] { ' ' });
+            string[] param = { menuIdBox.Text, menuNameBox.Text, menuProductsBox.Text };
 
-            if (AddNewMenu(
-                int.Parse(menuIdBox.Text),
-                menuNameBox.Text,
-                products
-                ))
+            if (_csvReader.InsertItem(param))
             {
                 // after adding new item update the table content
                 DisplayData();
                 ClearData();
+            }
+            else
+            {
+                MessageBox.Show("Menu was not added.");
             }
         }
 
@@ -54,8 +46,15 @@ namespace VismaWinterTask
             if (menuIdBox.Text != "" && menuNameBox.Text != "" && menuProductsBox.Text != "")
             {
                 string updatedItem = $"{menuIdBox.Text},{menuNameBox.Text},{menuProductsBox.Text}";
-                _csvReader.UpdateItem(int.Parse(menuIdBox.Text), updatedItem);
-                ClearData();
+                if (_csvReader.UpdateItem(int.Parse(menuIdBox.Text), updatedItem))
+                {
+                    ClearData();
+                    DisplayData();
+                }
+                else
+                {
+                    MessageBox.Show("Menu was not updated.");
+                }
             }
             else
             {
@@ -68,9 +67,15 @@ namespace VismaWinterTask
         {
             if (menuIdBox.Text != "")
             {
-                string item = $"{menuIdBox.Text},{menuNameBox.Text},{menuProductsBox.Text}";
-                _csvReader.DeleteItem(item);
-                ClearData();
+                if (_csvReader.DeleteItem(int.Parse(menuIdBox.Text)))
+                {
+                    ClearData();
+                    DisplayData();
+                }
+                else
+                {
+                    MessageBox.Show("Menu was not deleted.");
+                }
             }
             else
             {
@@ -81,7 +86,7 @@ namespace VismaWinterTask
         // display data in DataGridView
         private void DisplayData()
         {
-            _csvReader.ReadFile();
+            dataGridView1.DataSource = _csvReader.ReadFile();
         }
 
         // clear Data  
@@ -91,35 +96,5 @@ namespace VismaWinterTask
             menuNameBox.Text = "";
             menuProductsBox.Text = "";
         }
-
-        private bool AddNewMenu(int id, string name, string[] products)
-        {
-            // check if any of the given inputs are empty or in the incorrect format
-            if (id <= 0 || name.Length == 0 || products.Length == 0) { return false; }
-
-            try
-            {
-                StringBuilder builder = new StringBuilder();
-                builder.Append($"{id},{name},");
-                foreach (var product in products)
-                {
-                    builder.Append($"{product} ");
-                }
-
-                using (StreamWriter file = new StreamWriter(@_fileName, true))
-                {
-                    file.WriteLine(builder.ToString());
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error is " + ex.ToString());
-                throw;
-            }
-        }
-
-        
     }
 }
