@@ -1,9 +1,7 @@
 Id,Name,Portion Count,Unit,Portion size
-1,Chicken,1043,kg,0.3
-2,Chicken lll,995,kg,0.3
-3,Chickens,99,kgg,0.4
-4,Chickens1,97,kgg,0.4
-5,Chickens1,100,kgg,0.4
-6,Chickens1,1,kgg,0.4
-7,Chickens1,0,kgg,0.4
-8,-10,1,-10,1
+1,Chicken,7,kg,0.3
+2,Potatoes,8,kg,0.3
+3,Cabbage,8,kg,0.3
+4,Fish,2,kg,0.5
+5,Corn,18,g,0.2
+6,Butter,14,g,1.5
