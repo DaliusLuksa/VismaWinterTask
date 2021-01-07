@@ -206,6 +206,8 @@ namespace VismaWinterTask
 
         private bool CheckMenu(int index, List<string> menuLines, List<string> stockLines)
         {
+            bool isEnough = true;
+
             for (int i = 1; i < menuLines.Count; i++)
             {
                 var fields = menuLines[i].Split(new char[] { ',' });
@@ -219,7 +221,6 @@ namespace VismaWinterTask
                         if (CheckStock(int.Parse(productID), stockLines))
                         {
                             // product was found and there was enough
-                            return true;
                         }
                         else
                         {
@@ -230,8 +231,9 @@ namespace VismaWinterTask
                 }
             }
 
-            // product was not found
-            return false;
+            // return isEnough which is true if there was enough products
+            // false is there was no products or not enough
+            return isEnough;
         }
 
         private bool CheckStock(int index, List<string> stockLines)
