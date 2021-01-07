@@ -26,24 +26,27 @@ namespace VismaWinterTask
         // insert button
         private void button1_Click(object sender, EventArgs e)
         {
-            string[] param = { menuIdBox.Text, menuNameBox.Text, menuProductsBox.Text };
+            if (CheckInputs())
+            {
+                string[] param = { menuIdBox.Text, menuNameBox.Text, menuProductsBox.Text };
 
-            if (_csvReader.InsertItem(param))
-            {
-                // after adding new item update the table content
-                DisplayData();
-                ClearData();
-            }
-            else
-            {
-                MessageBox.Show("Menu was not added.");
+                if (_csvReader.InsertItem(param))
+                {
+                    // after adding new item update the table content
+                    DisplayData();
+                    ClearData();
+                }
+                else
+                {
+                    MessageBox.Show("Menu was not added.");
+                }
             }
         }
 
         // update button
         private void button2_Click(object sender, EventArgs e)
         {
-            if (menuIdBox.Text != "" && menuNameBox.Text != "" && menuProductsBox.Text != "")
+            if (CheckInputs())
             {
                 string updatedItem = $"{menuIdBox.Text},{menuNameBox.Text},{menuProductsBox.Text}";
                 if (_csvReader.UpdateItem(int.Parse(menuIdBox.Text), updatedItem))
@@ -55,10 +58,6 @@ namespace VismaWinterTask
                 {
                     MessageBox.Show("Menu was not updated.");
                 }
-            }
-            else
-            {
-                MessageBox.Show("Please selet stock item to update and fill all boxes.");
             }
         }
 
@@ -81,6 +80,59 @@ namespace VismaWinterTask
             {
                 MessageBox.Show("Please select stock item to delete.");
             }
+        }
+
+        private bool CheckInputs()
+        {
+            // check if given id value is int
+            // and is not null or empty
+            try
+            {
+                if (menuIdBox.Text == null || menuIdBox.Text.Length == 0)
+                {
+                    MessageBox.Show("Id cannot be empty.");
+                    return false;
+                }
+
+                int.Parse(menuIdBox.Text);
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Id can only be integer.");
+                return false;
+            }
+
+            // check if given name value is not empty or null
+            if (menuNameBox.Text == null || menuNameBox.Text.Length == 0)
+            {
+                MessageBox.Show("Name cannot be empty.");
+                return false;
+            }
+
+            // check if given products value is int
+            // and is not null or empty
+            try
+            {
+                if (menuProductsBox.Text == null || menuProductsBox.Text.Length == 0)
+                {
+                    MessageBox.Show("Products cannot be empty.");
+                    return false;
+                }
+
+                var products = menuProductsBox.Text.Split(new char[] { ' ' });
+                foreach (var product in products)
+                {
+                    int.Parse(product);
+                }
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Products can only be integers.");
+                return false;
+            }
+
+            
+            return true;
         }
 
         // display data in DataGridView
