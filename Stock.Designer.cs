@@ -46,6 +46,7 @@ namespace VismaWinterTask
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.button6 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -192,11 +193,22 @@ namespace VismaWinterTask
             this.label5.TabIndex = 16;
             this.label5.Text = "Size";
             // 
-            // Form1
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(659, 142);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.TabIndex = 17;
+            this.button6.Text = "Refresh";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // Stock
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -213,7 +225,7 @@ namespace VismaWinterTask
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.dataGridView1);
-            this.Name = "Form1";
+            this.Name = "Stock";
             this.Text = "Stock items";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
@@ -239,6 +251,7 @@ namespace VismaWinterTask
         private Label label3;
         private Label label4;
         private Label label5;
+        private Button button6;
     }
 }
 
