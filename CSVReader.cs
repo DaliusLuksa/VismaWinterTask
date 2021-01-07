@@ -2,26 +2,21 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace VismaWinterTask
 {
-    class CSVReader
+    public class CSVReader
     {
         private string _filename;
         private List<string> _lines;
-        private DataGridView _dataTable;
 
-        public CSVReader(string filename, DataGridView dataTable)
+        public CSVReader(string filename)
         {
             _filename = filename;
-            _dataTable = dataTable;
         }
 
-        public void ReadFile()
+        public DataTable ReadFile()
         {
             try
             {
@@ -48,17 +43,69 @@ namespace VismaWinterTask
                         Row[f] = Fields[f];
                     dt.Rows.Add(Row);
                 }
-                _dataTable.DataSource = dt;
+
+                return dt;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error is " + ex.ToString());
-                throw;
+                //MessageBox.Show("Error is " + ex.ToString());
+                return null;
             }
         }
 
-        public void UpdateItem(int index, string newLine)
+        public bool InsertItem(string[] param)
         {
+            // check if any of the given inputs are empty or in the incorrect format
+            // this doesn't check if correct amount of params was passed.
+            foreach (var item in param)
+            {
+                if (item == null || item.Length == 0)
+                {
+                    return false;
+                }
+            }
+
+            // check if the new item's id already exists in the list
+            // if exists then stop and return false
+            // if doesn't then continue
+            if (IsIdExists(int.Parse(param[0])))
+            {
+                return false;
+            }
+
+            try
+            {
+                StringBuilder builder = new StringBuilder();
+                foreach (var item in param)
+                {
+                    builder.Append($"{item},");
+                }
+                // remove the last ',' from the line
+                builder.Remove(builder.Length - 1, 1);
+                using (StreamWriter file = new StreamWriter(@_filename, true))
+                {
+                    file.WriteLine(builder);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("Error is " + ex.ToString());
+                return false;
+            }
+        }
+
+        public bool UpdateItem(int index, string newLine)
+        {
+            // check if the index is not <= 0
+            // or newLine is empty (checking for correct input on different files would be painful)
+            if (index <= 0 || newLine == "") 
+            {
+                //MessageBox.Show($"Index - {index} cannot be <= 0.");
+                return false;
+            }
+
             // because of date being written differently on each machine
             // instead of looking for a old line in the list
             // we have to split each line and look for a given id
@@ -84,28 +131,55 @@ namespace VismaWinterTask
                             file.Close();
                         }
 
-                        ReadFile();
-
                         // we updated the line so we can now return
-                        return;
+                        return true;
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error is " + ex.ToString());
-                        throw;
+                        //MessageBox.Show("Error is " + ex.ToString());
+                        return false;
                     }
                 }
             }
 
             // line which we wanted to update was not found
-            MessageBox.Show("The item you wish to update was not found.");
+            //MessageBox.Show("The item you wish to update was not found.");
+            return false;
         }
 
-        public void DeleteItem(string lineToDelete)
+        public bool DeleteItem(int index)
         {
+            // check if index is <= 0
+            // return false
+            if (index <= 0) { return false; }
+
+            bool isDeleted = false;
+
             try
             {
-                _lines.Remove(lineToDelete);
+                //_lines.Remove(lineToDelete);
+                for (int i = 1; i < _lines.Count; i++)
+                {
+                    int id = int.Parse(_lines[i].Split(new char[] { ',' })[0]);
+
+                    if (index == id)
+                    {
+                        // found the item we want to delete
+                        // remove the line from the list
+                        // and set the isDeleted to true
+                        _lines.RemoveAt(i);
+                        isDeleted = true;
+                        // we don't need to continue searching
+                        // so we breaking...
+                        break;
+                    }
+                }
+
+                // check if the line was found and deleted
+                if (!isDeleted)
+                {
+                    return false;
+                }
 
                 using (StreamWriter file = new StreamWriter(@_filename, false))
                 {
@@ -117,13 +191,37 @@ namespace VismaWinterTask
                     file.Close();
                 }
 
-                ReadFile();
+                return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error is " + ex.ToString());
-                throw;
+                //MessageBox.Show("Error is " + ex.ToString());
+                return false;
             }
+        }
+
+        private bool IsIdExists(int index)
+        {
+            // check if _lines is not null
+            // if it is then try to populate
+            if (_lines == null)
+            {
+                ReadFile();
+            }
+
+            for (int i = 1; i < _lines.Count; i++)
+            {
+                int id = int.Parse(_lines[i].Split(new char[] { ',' })[0]);
+
+                if (index == id)
+                {
+                    // id already exists in the list
+                    return true;
+                }
+            }
+
+            // id was not found in the list
+            return false;
         }
     }
 }
